@@ -3,8 +3,8 @@ from typing import List
 from ibm_watsonx_ai.foundation_models import ModelInference
 from langchain_core.documents import Document
 
-from POC.rag.src.models.base_model import BaseModel
-from POC.rag.src.utils.prompts import RAG_PROMPT_TEMPLATE
+from rag.src.models.base_model import BaseModel
+from rag.src.utils.prompts import RAG_PROMPT_TEMPLATE
 
 
 DEFAULT_MODEL_NAME = "mistralai/mistral-large"

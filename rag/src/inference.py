@@ -1,11 +1,11 @@
 from dotenv import load_dotenv
-from POC.rag.src.utils.watsonx_client import watsonx_client
-from POC.rag.src.embeddings.watsonx_embeddings import WatsonXEmbeddings
-from POC.rag.src.embeddings.google_embeddings import GoogleEmbeddings
-from POC.rag.src.retrievers.primitive_retriever import PrimitiveRetriever
-from POC.rag.src.vector_stores.chroma_vector_store import ChromaVectorStore
-from POC.rag.src.models.watsonx_model import WatsonXModel
-from POC.rag.src.models.google_model import GoogleModel
+from rag.src.utils.watsonx_client import watsonx_client
+from rag.src.embeddings.watsonx_embeddings import WatsonXEmbeddings
+from rag.src.embeddings.google_embeddings import GoogleEmbeddings
+from rag.src.retrievers.primitive_retriever import PrimitiveRetriever
+from rag.src.vector_stores.chroma_vector_store import ChromaVectorStore
+from rag.src.models.watsonx_model import WatsonXModel
+from rag.src.models.google_model import GoogleModel
 
 ENV_PATH = "/Users/wnowogorski/PycharmProjects/ChatAGH/POC/config/.env"
 VECTOR_STORE_PATH = "/Users/wnowogorski/PycharmProjects/ChatAGH/POC"

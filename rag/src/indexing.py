@@ -1,12 +1,12 @@
 import sys
 
 from dotenv import load_dotenv
-from POC.rag.src.utils.utils import load_from_json
-from POC.rag.src.utils.watsonx_client import watsonx_client
-from POC.rag.src.chunkers.langchain_chunker import LangChainChunker
-from POC.rag.src.embeddings.watsonx_embeddings import WatsonXEmbeddings
-from POC.rag.src.embeddings.google_embeddings import GoogleEmbeddings
-from POC.rag.src.vector_stores.chroma_vector_store import ChromaVectorStore
+from rag.src.utils.utils import load_from_json
+from rag.src.utils.watsonx_client import watsonx_client
+from rag.src.chunkers.langchain_chunker import LangChainChunker
+from rag.src.embeddings.watsonx_embeddings import WatsonXEmbeddings
+from rag.src.embeddings.google_embeddings import GoogleEmbeddings
+from rag.src.vector_stores.chroma_vector_store import ChromaVectorStore
 
 ENV_PATH = "/Users/wnowogorski/PycharmProjects/ChatAGH/POC/config/.env"
 DATA_PATH = "/Users/wnowogorski/PycharmProjects/ChatAGH/POC/data/httpswww.agh.edu.pl.json"
