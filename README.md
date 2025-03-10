@@ -4,7 +4,6 @@ Chat AGH is a Retrieval-Augmented Generation (RAG) system designed to deliver ac
 
 ## Installation, setup and usage
 ## Data
-## Architecture
+## Documentation (Architecture and Technologies)
 ## Evaluation
-## Technologies
 ## Future improvements
