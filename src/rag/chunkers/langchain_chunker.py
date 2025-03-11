@@ -57,26 +57,6 @@ class LangChainChunker(BaseChunker):
 
         chunked_docs = self.text_splitter.split_documents(documents)
 
-        if self.add_start_index:
-            for doc in chunked_docs:
-                if not doc.metadata:
-                    doc.metadata = {}
-
-                parent_id = doc.metadata.get("parent_id")
-                parent_text = None
-                if parent_id:
-                    for original_doc in documents:
-                        if original_doc.metadata.get("id") == parent_id:
-                            parent_text = original_doc.page_content
-                            break
-
-                if parent_text and doc.page_content in parent_text:
-                    doc.metadata["start_index"] = parent_text.index(doc.page_content)
-                else:
-                    doc.metadata["start_index"] = 0
-
-                doc.metadata["chunk_index"] = chunked_docs.index(doc)
-
         return chunked_docs
 
     def chunk_text(self, text: str, metadata: Optional[Dict[str, Any]] = None) -> List[Any]:
