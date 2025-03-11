@@ -29,6 +29,10 @@ Install requirements
 ```
 pip install -r requirements.txt
 ```
+Run streamlit app
+```
+streamlit run src/streamlit_app.py
+```
 
 ## Data sources and preparation
 
