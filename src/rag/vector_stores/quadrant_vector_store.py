@@ -5,6 +5,7 @@ from langchain_core.documents import Document
 from qdrant_client import QdrantClient
 from qdrant_client.http import models as rest
 
+
 from src.rag.vector_stores.base_vector_store import BaseVectorStore
 
 class QuadrantCloudVectorStore(BaseVectorStore):
@@ -16,6 +17,7 @@ class QuadrantCloudVectorStore(BaseVectorStore):
         embedding_fn: Optional[Callable[[str], List[float]]],
         vector_size: int = 768,
         distance_metric: str = "Cosine",
+        upload_batch_size: int = 1000
     ):
         """
         Initialize the Qdrant Cloud vector store.
@@ -34,6 +36,7 @@ class QuadrantCloudVectorStore(BaseVectorStore):
         self.vector_size = vector_size
         self.distance_metric = distance_metric
         self.client = QdrantClient(url=url, api_key=api_key)
+        self.batch_size = upload_batch_size
 
         self._ensure_collection_exists()
 
@@ -51,9 +54,9 @@ class QuadrantCloudVectorStore(BaseVectorStore):
             )
 
     def add_documents(
-        self,
-        documents: List[Document],
-        embeddings: Optional[List[List[float]]] = None
+            self,
+            documents: List[Document],
+            embeddings: Optional[List[List[float]]] = None
     ) -> List[str]:
         """
         Add documents along with their embeddings to the Qdrant collection.
@@ -68,15 +71,14 @@ class QuadrantCloudVectorStore(BaseVectorStore):
         Returns:
             List of document IDs added.
         """
-        points = []
         doc_ids = []
+        batches = []
 
         if embeddings is not None and len(embeddings) != len(documents):
             raise ValueError("Length of embeddings must match the number of documents")
 
+        # Split documents into batches
         for idx, doc in enumerate(documents):
-            print(f"Adding document: {idx} / {len(documents)}")
-
             doc_id = str(uuid.uuid4())
             doc_ids.append(doc_id)
 
@@ -96,14 +98,26 @@ class QuadrantCloudVectorStore(BaseVectorStore):
                 vector=vector,
                 payload=payload
             )
-            points.append(point)
+            batches.append(point)
 
-        self.client.upsert(
-            collection_name=self.collection_name,
-            points=points
-        )
+            if len(batches) >= self.batch_size:
+                self._upsert_batch(batches)
+                batches.clear()
+
+        if batches:
+            self._upsert_batch(batches)
 
         return doc_ids
+
+    def _upsert_batch(self, batch_points):
+        """Helper function to upsert a batch of points into Qdrant."""
+        try:
+            self.client.upsert(
+                collection_name=self.collection_name,
+                points=batch_points
+            )
+        except Exception as e:
+            print(f"Error during batch upsert: {e}")
 
     def search(self, query: Union[str, List[float]], k: int = 5) -> List[Document]:
         """

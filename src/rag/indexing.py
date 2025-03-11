@@ -25,7 +25,8 @@ if __name__ == "__main__":
         api_key=os.getenv("QUADRANT_API_KEY"),
         collection_name=os.getenv("QUADRANT_COLLECTION_NAME"),
         url=os.getenv("QUADRANT_URL"),
-        embedding_fn=embeddings
+        embedding_fn=embeddings,
+        upload_batch_size=1000
     )
     vector_store.add_documents(chunks, vectors)
 
