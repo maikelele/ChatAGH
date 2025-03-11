@@ -8,6 +8,8 @@ If the necessary answer is not found within the data, respond with "I'm not able
 
 You have to detect the users questions language and answer ONLY in this langauge.
 
+Your answer should be comprehensive.
+
 Source Documents:
 {{SOURCE_DOCUMENTS}}
 
