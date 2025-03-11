@@ -12,20 +12,20 @@
 Chat AGH is a Retrieval-Augmented Generation (RAG) system designed to deliver accurate and relevant information about academic matters at AGH University of Science and Technology. The system aggregates data sourced from university websites, enabling it to provide comprehensive answers to a wide range of user inquiries, which may include topics related to admissions, faculty-specific information, campus facilities, events, etc.
 
 ## Developer guide
-### Clone repository
+Clone repository
 ```
 git clone https://github.com/witoldnowogorski/ChatAGH
 ```
-### Create a new virtual environment
+Create a new virtual environment
 ```
 python3 -m venv chat_agh
 ```
-### Activate the environment
+Activate the environment
 ```
 source chat_agh/bin/activate
 ```
 
-### Install requirements
+Install requirements
 ```
 pip install -r requirements.txt
 ```
