@@ -16,9 +16,15 @@ Chat AGH is a Retrieval-Augmented Generation (RAG) system designed to deliver ac
 ```
 git clone https://github.com/witoldnowogorski/ChatAGH
 ```
-### Setup conda anvironment
+### Create a new virtual environment
 ```
+python3 -m venv chat_agh
 ```
+### Activate the environment
+```
+source chat_agh/bin/activate
+```
+
 ### Install requirements
 ```
 pip install -r requirements.txt
