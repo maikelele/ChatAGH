@@ -2,7 +2,7 @@
 
 ## Contents
 - [Overview](#overview)
-- [Installation, setup and usage](#installation-setup-and-usage)
+- [Developer guide](#developer-guide)
 - [Data sources and preparation](#data-sources-and-preparation)
 - [Documentation (Architecture and Technologies)](#documentation-architecture-and-technologies)
 - [Metrics and evaluation](#metrics-and-evaluation)
