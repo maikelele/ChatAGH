@@ -6,7 +6,7 @@ from chromadb.config import Settings
 
 from langchain_core.documents import Document
 
-from rag.src.vector_stores.base_vector_store import BaseVectorStore
+from rag.vector_stores.base_vector_store import BaseVectorStore
 
 
 class ChromaVectorStore(BaseVectorStore):

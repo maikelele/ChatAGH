@@ -3,8 +3,8 @@ from typing import List
 
 from google import genai
 from langchain_core.documents import Document
-from rag.src.embeddings.base_embeddings import BaseEmbeddings
-from rag.src.utils.utils import retry_on_exception
+from rag.embeddings.base_embeddings import BaseEmbeddings
+from rag.utils.utils import retry_on_exception
 
 
 class GoogleEmbeddings(BaseEmbeddings):
