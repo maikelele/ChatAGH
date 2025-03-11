@@ -1,6 +1,6 @@
 from typing import List, Dict, Any, Optional, Callable
 
-from rag.src.chunkers.base_chunker import BaseChunker
+from src.rag.chunkers.base_chunker import BaseChunker
 
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter

@@ -3,8 +3,8 @@ import os
 from google import genai
 from langchain_core.documents import Document
 
-from rag.src.models.base_model import BaseModel
-from rag.src.utils.prompts import RAG_PROMPT_TEMPLATE
+from rag.models.base_model import BaseModel
+from rag.utils.prompts import RAG_PROMPT_TEMPLATE
 
 
 class GoogleModel(BaseModel):

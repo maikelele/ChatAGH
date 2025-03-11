@@ -2,9 +2,9 @@ from typing import List
 
 from langchain_core.documents import Document
 
-from rag.src.retrievers.base_retriever import BaseRetriever
-from rag.src.vector_stores.base_vector_store import BaseVectorStore
-from rag.src.embeddings.base_embeddings import BaseEmbeddings
+from rag.retrievers.base_retriever import BaseRetriever
+from rag.vector_stores.base_vector_store import BaseVectorStore
+from rag.embeddings.base_embeddings import BaseEmbeddings
 
 
 class PrimitiveRetriever(BaseRetriever):
