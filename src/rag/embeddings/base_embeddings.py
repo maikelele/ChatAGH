@@ -34,3 +34,7 @@ class BaseEmbeddings(ABC):
             Embedding vector for the query
         """
         pass
+
+    @abstractmethod
+    def __call__(self, *args, **kwargs):
+        pass

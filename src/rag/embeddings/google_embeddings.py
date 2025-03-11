@@ -18,6 +18,7 @@ class GoogleEmbeddings(BaseEmbeddings):
         embed_vectors = []
         if batch_size is not None:
             for i in range(0, len(texts), batch_size):
+                print(f"EMBEDDING {i}/{len(texts)}")
                 texts_to_embed = texts[i:i+batch_size]
                 embedded_texts = self._embed(texts_to_embed)
                 embed_vectors.extend(embedded_texts)
@@ -38,6 +39,6 @@ class GoogleEmbeddings(BaseEmbeddings):
         return [e.values for e in result.embeddings]
 
     def __call__(self, *args, **kwargs):
-        return self._embed(*args, **kwargs)
+        return self._embed(*args, **kwargs)[0]
 
 

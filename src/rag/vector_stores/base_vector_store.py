@@ -35,29 +35,3 @@ class BaseVectorStore(ABC):
             List of documents with similarity scores
         """
         pass
-
-    @abstractmethod
-    def delete(self, document_ids: List[str]) -> bool:
-        """
-        Delete documents from the vector store.
-
-        Args:
-            document_ids: List of document IDs to delete
-
-        Returns:
-            Success status
-        """
-        pass
-
-    @abstractmethod
-    def get(self, document_ids: List[str]) -> List[Document]:
-        """
-        Retrieve documents by ID.
-
-        Args:
-            document_ids: List of document IDs to retrieve
-
-        Returns:
-            List of retrieved documents
-        """
-        pass
