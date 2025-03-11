@@ -17,7 +17,8 @@ class LangChainChunker(BaseChunker):
         chunk_overlap: int = 200,
         separators: List[str] = None,
         length_function: Callable[[str], int] = len,
-        add_start_index: bool = True
+        add_start_index: bool = True,
+        remove_duplicates: bool = False,
     ):
         """
         Initialize the LangChain document chunkers.
@@ -34,6 +35,7 @@ class LangChainChunker(BaseChunker):
         self.separators = separators
         self.length_function = length_function
         self.add_start_index = add_start_index
+        self.remove_duplicates = remove_duplicates
 
         self.text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=chunk_size,
@@ -56,6 +58,17 @@ class LangChainChunker(BaseChunker):
             raise ValueError("All documents must be LangChain Document objects")
 
         chunked_docs = self.text_splitter.split_documents(documents)
+
+        if self.remove_duplicates:
+            seen_page_contents = set()
+            unique_chunked_docs = []
+
+            for doc in chunked_docs:
+                if doc.page_content not in seen_page_contents:
+                    unique_chunked_docs.append(doc)
+                    seen_page_contents.add(doc.page_content)
+
+            chunked_docs = unique_chunked_docs
 
         return chunked_docs
 

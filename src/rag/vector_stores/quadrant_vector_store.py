@@ -6,7 +6,7 @@ from qdrant_client import QdrantClient
 from qdrant_client.http import models as rest
 
 
-from src.rag.vector_stores.base_vector_store import BaseVectorStore
+from rag.vector_stores.base_vector_store import BaseVectorStore
 
 class QuadrantCloudVectorStore(BaseVectorStore):
     def __init__(

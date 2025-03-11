@@ -15,7 +15,7 @@ if __name__ == "__main__":
     load_dotenv(dotenv_path=ENV_PATH)
     data = load_from_json(DATA_PATH)
 
-    chunker = LangChainChunker(1000, 100)
+    chunker = LangChainChunker(1000, 100, remove_duplicates=True)
     chunks = chunker.chunk(data)
 
     embeddings = GoogleEmbeddings()
