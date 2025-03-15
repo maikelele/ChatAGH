@@ -1,17 +1,14 @@
 import os
 import json
+
 import time
 import functools
 
-from dotenv import load_dotenv
-from langchain_core.documents import Document
-
-import os
-import json
-from langchain.schema import Document
 import pypdf
 import docx
 import glob
+from dotenv import load_dotenv
+from langchain.schema import Document
 
 
 def load_data(path: str, max_docs: int = None):

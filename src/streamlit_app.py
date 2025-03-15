@@ -1,8 +1,6 @@
 import os
 import streamlit as st
 import tempfile
-import glob
-import json
 
 from rag.utils.utils import load_env
 from rag.indexing import indexing
@@ -12,10 +10,8 @@ from rag.inference import inference
 def main():
     st.title("Chat AGH development")
 
-    # Load environment variables first so they're available for defaults
     load_env()
 
-    # Get default collection name from environment variable
     default_collection = os.environ.get("QDRANT_COLLECTION_NAME", "default_collection")
 
     tab1, tab2 = st.tabs(["Indexing", "Inference"])
@@ -25,7 +21,6 @@ def main():
 
         collection_name = st.text_input("Collection Name", value=default_collection)
 
-        # Option to choose between file upload and directory path
         index_method = st.radio(
             "Choose data source method:",
             ("Upload File", "Specify Directory Path")
@@ -40,7 +35,6 @@ def main():
                     tmp_file.write(uploaded_file.getvalue())
                     file_path = tmp_file.name
         else:
-            # Directory path input
             file_path = st.text_input("Enter directory path containing JSON files")
 
         col1, col2 = st.columns(2)
@@ -49,7 +43,7 @@ def main():
 
         if st.button("Process and Index"):
             if file_path:
-                delete_after = index_method == "Upload File"  # Only delete if it's a temporary uploaded file
+                delete_after = index_method == "Upload File"
 
                 with st.spinner("Indexing documents..."):
                     try:
@@ -66,8 +60,7 @@ def main():
     with tab2:
         st.header("Query Inference")
 
-        # Use the same default collection name from environment variable
-        collection_name = st.text_input("Collection Name for Inference", value=default_collection)
+        # collection_name = st.text_input("Collection Name for Inference", value=default_collection)
 
         query = st.text_area("Enter your query", height=100)
 
@@ -75,7 +68,7 @@ def main():
             if query:
                 with st.spinner("Running inference..."):
                     try:
-                        response, source_docs = inference(query, collection_name)
+                        response, source_docs = inference(query)
 
                         st.subheader("Model Response")
                         st.write(response)
