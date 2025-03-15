@@ -1,103 +1,94 @@
-import streamlit as st
-from dotenv import load_dotenv
-
-from rag.embeddings.google_embeddings import GoogleEmbeddings
-from rag.retrievers.primitive_retriever import PrimitiveRetriever
-from rag.vector_stores.quadrant_vector_store import QuadrantCloudVectorStore
-from rag.models.google_model import GoogleModel
 import os
+import streamlit as st
+import tempfile
+import glob
+import json
 
-# Configuration paths
-ENV_PATH = "/Users/wnowogorski/PycharmProjects/CHAT_AGH/config/.env"
-VECTOR_STORE_PATH = "/Users/wnowogorski/PycharmProjects/CHAT_AGH"
-
-# Load environment variables
-load_dotenv(dotenv_path=ENV_PATH)
-
-
-def setup_rag_inference():
-    """Initialize the RAG components"""
-    embeddings = GoogleEmbeddings()
-
-    vector_store = QuadrantCloudVectorStore(
-        api_key=os.getenv("QUADRANT_API_KEY"),
-        collection_name=os.getenv("QUADRANT_COLLECTION_NAME"),
-        url=os.getenv("QUADRANT_URL"),
-        embedding_fn=embeddings
-    )
-
-    retriever = PrimitiveRetriever(vector_store=vector_store)
-    model = GoogleModel()
-
-    return retriever, model
+from rag.utils.utils import load_env
+from rag.indexing import indexing
+from rag.inference import inference
 
 
 def main():
-    st.set_page_config(page_title="RAG Q&A System", layout="wide")
+    st.title("Chat AGH development")
 
-    st.title("RAG Q&A System")
-    st.write("Ask a question and get an answer based on retrieved documents")
+    # Load environment variables first so they're available for defaults
+    load_env()
 
-    # Initialize session state for history
-    if 'history' not in st.session_state:
-        st.session_state.history = []
+    # Get default collection name from environment variable
+    default_collection = os.environ.get("QDRANT_COLLECTION_NAME", "default_collection")
 
-    # Initialize RAG components
-    retriever, model = setup_rag_inference()
+    tab1, tab2 = st.tabs(["Indexing", "Inference"])
 
-    # User input
-    query = st.text_input("Wprowadź pytanie:", key="user_question")
+    with tab1:
+        st.header("Document Indexing")
 
-    if st.button("Wyślij pytanie"):
-        if query:
-            with st.spinner("Przetwarzanie pytania..."):
-                # Retrieve documents
-                source_docs = retriever.invoke(query)
+        collection_name = st.text_input("Collection Name", value=default_collection)
 
-                # Generate response
-                response = model.generate_from_documents(query, source_docs)
+        # Option to choose between file upload and directory path
+        index_method = st.radio(
+            "Choose data source method:",
+            ("Upload File", "Specify Directory Path")
+        )
 
-                # Store in session state
-                st.session_state.history.append({
-                    "query": query,
-                    "source_docs": source_docs,
-                    "response": response
-                })
+        file_path = None
 
-    # Display history
-    if st.session_state.history:
-        latest_interaction = st.session_state.history[-1]
+        if index_method == "Upload File":
+            uploaded_file = st.file_uploader("Choose a JSON file", type="json")
+            if uploaded_file is not None:
+                with tempfile.NamedTemporaryFile(delete=False, suffix='.json') as tmp_file:
+                    tmp_file.write(uploaded_file.getvalue())
+                    file_path = tmp_file.name
+        else:
+            # Directory path input
+            file_path = st.text_input("Enter directory path containing JSON files")
 
-        st.header("Wyniki")
-
-        # Display the query
-        st.subheader("Pytanie:")
-        st.write(latest_interaction["query"])
-
-        # Two-column layout for results
         col1, col2 = st.columns(2)
+        chunk_size = col1.number_input("Chunk Size", value=1000, min_value=100, max_value=10000)
+        chunk_overlap = col2.number_input("Chunk Overlap", value=100, min_value=0, max_value=chunk_size - 1)
 
-        # Display response in first column
-        with col1:
-            st.subheader("Odpowiedź modelu:")
-            st.write(latest_interaction["response"])
+        if st.button("Process and Index"):
+            if file_path:
+                delete_after = index_method == "Upload File"  # Only delete if it's a temporary uploaded file
 
-        # Display source documents in second column
-        with col2:
-            st.subheader("Źródłowe dokumenty:")
-            for i, doc in enumerate(latest_interaction["source_docs"]):
-                with st.expander(f"Dokument {i + 1}"):
-                    st.write(doc.page_content)
-                    st.write("---")
-                    st.write(f"Źródło: {doc.metadata.get('source', 'Unknown')}")
+                with st.spinner("Indexing documents..."):
+                    try:
+                        num_chunks = indexing(file_path, collection_name, chunk_size, chunk_overlap)
+                        st.success(f"Successfully indexed {num_chunks} chunks into collection '{collection_name}'")
+                    except Exception as e:
+                        st.error(f"Error during indexing: {str(e)}")
+                    finally:
+                        if delete_after:
+                            os.unlink(file_path)
+            else:
+                st.error("Please select a file to index")
 
-        # Show history
-        if len(st.session_state.history) > 1:
-            with st.expander("Historia pytań"):
-                for i, interaction in enumerate(st.session_state.history[:-1]):
-                    st.write(f"**Pytanie {i + 1}:** {interaction['query']}")
-                    st.write(f"**Odpowiedź:** {interaction['response'][:100]}...")
-                    st.write("---")
+    with tab2:
+        st.header("Query Inference")
+
+        # Use the same default collection name from environment variable
+        collection_name = st.text_input("Collection Name for Inference", value=default_collection)
+
+        query = st.text_area("Enter your query", height=100)
+
+        if st.button("Run Inference"):
+            if query:
+                with st.spinner("Running inference..."):
+                    try:
+                        response, source_docs = inference(query, collection_name)
+
+                        st.subheader("Model Response")
+                        st.write(response)
+
+                        st.subheader("Retrieved Documents")
+                        for i, doc in enumerate(source_docs):
+                            with st.expander(f"Document {i + 1}"):
+                                st.write(doc)
+                    except Exception as e:
+                        st.error(f"Error during inference: {str(e)}")
+            else:
+                st.error("Please enter a query")
+
 
 if __name__ == "__main__":
     main()

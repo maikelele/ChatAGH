@@ -9,7 +9,7 @@ from rag.utils.prompts import RAG_PROMPT_TEMPLATE
 
 class GoogleModel(BaseModel):
     def __init__(self, model_name="gemini-2.0-flash-001"):
-        self.client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+        self.client = genai.Client(api_key=os.environ["GOOGLE_API_KEY"])
         self.model = model_name
 
     def generate_from_documents(self, question: str, documents: list[Document]):

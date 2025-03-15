@@ -4,7 +4,7 @@ from ibm_watsonx_ai import APIClient
 from ibm_watsonx_ai.foundation_models.embeddings import Embeddings
 from langchain_core.documents import Document
 
-from src.rag.embeddings.base_embeddings import BaseEmbeddings
+from rag.embeddings.base_embeddings import BaseEmbeddings
 
 DEFAULT_EMBEDDING_MODEL = 'ibm/granite-embedding-107m-multilingual'
 

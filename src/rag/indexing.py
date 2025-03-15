@@ -1,32 +1,29 @@
 import os
 
 from dotenv import load_dotenv
-from src.rag.utils.utils import load_from_json
-from src.rag.chunkers.langchain_chunker import LangChainChunker
-from src.rag.embeddings.google_embeddings import GoogleEmbeddings
-from src.rag.vector_stores.quadrant_vector_store import QuadrantCloudVectorStore
+from rag.utils.utils import load_data
+from rag.chunkers.langchain_chunker import LangChainChunker
+from rag.embeddings.google_embeddings import GoogleEmbeddings
+from rag.vector_stores.qdrant_hybrid_search import QdrantHybridSearchVectorStore
 
 ENV_PATH = "/Users/wnowogorski/PycharmProjects/CHAT_AGH/config/.env"
-DATA_PATH = "/Users/wnowogorski/PycharmProjects/CHAT_AGH/data/httpswww.agh.edu.pl.json"
+DATA_PATH = "/Users/wnowogorski/PycharmProjects/CHAT_AGH/data/rekrutacja_agh"
 VECTOR_STORE_PATH = "/Users/wnowogorski/PycharmProjects/CHAT_AGH"
 
 
-if __name__ == "__main__":
-    load_dotenv(dotenv_path=ENV_PATH)
-    data = load_from_json(DATA_PATH)
+def indexing(data_path, collection_name, chunk_size=1000, chunk_overlap=100):
+    """
+    Index documents from the given data path into the vector store
+    """
+    data = load_data(data_path)
 
-    chunker = LangChainChunker(1000, 100, remove_duplicates=True)
+    chunker = LangChainChunker(chunk_size, chunk_overlap, remove_duplicates=True)
     chunks = chunker.chunk(data)
 
-    embeddings = GoogleEmbeddings()
-    vectors = embeddings.embed_documents(chunks, batch_size=100)
+    vector_store = QdrantHybridSearchVectorStore(collection_name=collection_name)
+    vector_store.index(chunks)
 
-    vector_store = QuadrantCloudVectorStore(
-        api_key=os.getenv("QUADRANT_API_KEY"),
-        collection_name=os.getenv("QUADRANT_COLLECTION_NAME"),
-        url=os.getenv("QUADRANT_URL"),
-        embedding_fn=embeddings,
-        upload_batch_size=1000
-    )
-    vector_store.add_documents(chunks, vectors)
+    return len(chunks)
 
+if __name__ == "__main__":
+    indexing(DATA_PATH, os.environ.get("QDRANT_COLLECTION_NAME"))
