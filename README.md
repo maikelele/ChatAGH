@@ -72,24 +72,24 @@ To enhance search effectiveness, a hybrid search retrieval mechanism is implemen
 By combining these embedding techniques, the retrieval system is capable of delivering high-quality search results that balance both semantic relevance and lexical precision.
 
 
-
-
-
 ## Inference
 
 ### Query Augmentation
-Short queries sometimes can carry too little information to retrieve most relevent chunks, to levarage this each query is expaned. We are using accordingly prompted LLM to rewrite question to cover more information.
+Short queries often lack sufficient detail to retrieve the most relevant chunks. To address this, each query is expanded using a properly prompted LLM. This process ensures that the question covers more information, improving retrieval effectiveness.
 
 ### Hybrid Search Retrieval
-As mentioned above, chunks are stored wtih three embedding vector (`dense`, `spare` and `late interaction`). Our hybrid search implementation includes:
-- Prefetch: uses dense and sparse embeddings, extracts most similar to the augmented query.
-- We are using `late_interaction` model to compare query vector agains vectors extracted from fetch step, specified number of most similar ones is returned. 
+As mentioned earlier, chunks are stored with three types of embedding vectors (`dense`, `sparse`, and `late interaction`). Our hybrid search implementation includes:
 
-### Multi Collection Search
+- **Prefetching**: Uses dense and sparse embeddings to extract the most similar chunks to the augmented query.
+- **Late Interaction Filtering**: The `late_interaction` model compares the query vector against vectors retrieved in the prefetch step. A specified number of the most relevant chunks is then returned.
 
+### Multi-Collection Search
+To optimize retrieval performance and quality, data is segmented into thematically similar groups, each stored in a separate vector store collection. During retrieval, our system queries all collections separately using hybrid search, retrieving a larger set of chunks. Next, we compare the dense embedding vectors of the retrieved chunks against the augmented query vector and return the most similar ones. This approach ensures that the most relevant chunks are retrieved across the entire dataset while maintaining high performance.
 
 ### Enhanced Retrieval Generation
+Since retrieval may not always yield all necessary information to answer a query, we use an additional LLM during the generation step. This model assesses whether more data is required. If so, it generates additional questions, and the vector store is queried again to refine the retrieved sources. This iterative process continues until either all necessary information is found or a predefined search limit is reached.
 
+Finally, following the classical RAG approach, we use a properly prompted LLM to generate the final answer based on the retrieved information.
 
 # Metrics and evaluation
 
