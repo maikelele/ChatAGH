@@ -3,7 +3,6 @@ import os
 from dotenv import load_dotenv
 from rag.utils.utils import load_data
 from rag.chunkers.langchain_chunker import LangChainChunker
-from rag.embeddings.google_embeddings import GoogleEmbeddings
 from rag.vector_store.qdrant_hybrid_search import QdrantHybridSearchVectorStore
 
 ENV_PATH = ".env"
