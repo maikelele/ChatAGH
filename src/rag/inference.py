@@ -8,7 +8,7 @@ from rag.models.google_genai_models import (
     AnswerGenerationModel
 )
 
-ENV_PATH = "src/.env"
+ENV_PATH = ".env"
 NUM_RETRIEVED_CHUNKS = 20
 MAX_SEARCH_ITERATIONS = 5
 
@@ -41,7 +41,6 @@ def inference(query):
     final_response = answer_generation_model.generate(augmented_query, context=source_docs)
 
     return final_response, source_docs
-
 
 
 if __name__ == "__main__":
