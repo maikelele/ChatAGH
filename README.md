@@ -37,7 +37,7 @@ pip install -r requirements.txt
 ```
 
 ### Credentials
-Add `.env` file with your credentials in config directory, you can find required credentials in `.env.template`
+Add `.env` file with your credentials in src directory, you can find required credentials in `.env.template`
 
 ### Run streamlit app
 ```
