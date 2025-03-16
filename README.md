@@ -1,6 +1,4 @@
-# Chat AGH
-
-## Contents
+# Contents
 - [Overview](#overview)
 - [Developer guide](#developer-guide)
 - [Data sources and preparation](#data-sources-and-preparation)
@@ -8,10 +6,10 @@
 - [Metrics and evaluation](#metrics-and-evaluation)
 - [Future Improvements](#future-improvements)
 
-## Overview
+# Overview
 Chat AGH is a Retrieval-Augmented Generation (RAG) system designed to deliver accurate and relevant information about academic matters at AGH University of Science and Technology. The system aggregates data sourced from university websites, enabling it to provide comprehensive answers to a wide range of user inquiries, which may include topics related to admissions, faculty-specific information, campus facilities, events, etc.
 
-## Developer guide
+# Developer guide
 
 ### Clone repository
 ```
@@ -46,10 +44,32 @@ Add `.env` file with your credentials in config directory, you can find required
 streamlit run src/streamlit_app.py
 ```
 
-## Data sources and preparation
+# Data sources and preparation
 
-## RAG implementation
+# RAG implementation
 
-## Metrics and evaluation
+## Indexing
+Designed to enable efficient retrieval of text documents using a hybrid search approach. The architecture integrates multiple embedding techniques and a scalable vector store for optimized information retrieval.
 
-## Future Improvements
+
+#### Vector Store
+
+The project utilizes Qdrant, a high-performance vector database optimized for hybrid search. Qdrant enables efficient storage and retrieval of vector representations, supporting multiple embedding types.
+
+#### Hybrid Search
+
+To enhance search quality, the system employs a hybrid retrieval mechanism combining:
+- Dense Embeddings – Derived from `distiluse-base-multilingual-cased-v1`, a transformer-based sentence embedding model optimized for semantic similarity.
+- Sparse Embeddings – Generated using `Qdrant/bm25`, a traditional keyword-based retrieval model leveraging term frequency-inverse document frequency (TF-IDF) techniques.
+- Late Interaction Embeddings – Based on `colbert-ir/colbertv2.0`, a deep-learning-based ranking model that refines search results through late interaction mechanisms.
+
+#### Indexing Workflow
+- Chunking – Data is split into structured segments using predefined chunk size.
+- Embedding Generation – Each chunk is encoded using the three embedding models.
+- Storage – The resulting vectors are stored in Qdrant, facilitating hybrid retrieval during inference.
+
+## Inference
+
+# Metrics and evaluation
+
+# Future Improvements
