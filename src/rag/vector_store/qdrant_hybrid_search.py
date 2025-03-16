@@ -8,6 +8,28 @@ from rag.embeddings.sentence_transformers_embeddings import SentenceTransformers
 
 
 class QdrantHybridSearchVectorStore:
+    """
+    A vector store interface for hybrid search using Qdrant.
+
+    This class connects to a Qdrant server and manages a single collection for performing
+    hybrid search. It supports indexing documents and executing search queries using a combination
+    of dense, sparse, and late interaction embeddings.
+
+    Attributes:
+        collection_name (str): Name of the Qdrant collection to operate on.
+        client (QdrantClient): Client instance for interacting with the Qdrant server.
+        dense_embedding_model (SentenceTransformersEmbeddings): Model used to generate dense embeddings.
+        sparse_embedding_model (SparseTextEmbedding): Model used to generate sparse text embeddings.
+        late_interaction_embedding_model (LateInteractionTextEmbedding): Model used for generating late interaction embeddings.
+
+    Methods:
+        index(documents: list[Document]):
+            Indexes a list of Document objects by generating their embeddings and uploading them to the collection.
+
+        search(query: str, k: int = 5, **kwargs) -> list:
+            Performs a search query using late interaction embeddings with prefetching of dense and sparse vectors,
+            and returns a list of document payloads from the Qdrant collection.
+    """
     def __init__(self, collection_name: str):
         self.collection_name = collection_name
 

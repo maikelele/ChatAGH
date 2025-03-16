@@ -1,3 +1,5 @@
+from typing import Sequence
+
 from concurrent.futures import ThreadPoolExecutor
 import numpy as np
 
@@ -8,12 +10,42 @@ QDRANT_COLLECTIONS = [
     "agh_edu",
     "eaiib",
     "miasteczko_agh",
-
     "rekrutacja_agh"
 ]
 
 
 class MultiCollectionSearch:
+    """
+    A search engine that performs multi-collection retrieval using Qdrant hybrid search.
+
+    This class manages multiple Qdrant collections and executes parallel search queries
+    across them. The results are reranked using cosine similarity based on dense embeddings.
+
+    Attributes:
+        collections (list): List of Qdrant collection names to search in.
+        connectors (list): List of QdrantHybridSearchVectorStore instances for each collection.
+        dense_embedding_model (SentenceTransformersEmbeddings): Model for generating dense embeddings.
+
+    Methods:
+        _search_single(connector, query, k_per_collection):
+            Executes a search query on a single collection.
+
+        _compute_similarity(query_embedding, result_embedding):
+            Computes cosine similarity between query and result embeddings.
+
+        search(query: str, k: int = 5, **kwargs):
+            Searches across multiple collections in parallel, retrieves results,
+            and reranks them using dense embedding similarity.
+
+            Args:
+                query (str): The search query.
+                k (int): The number of top results to return.
+                **kwargs: Optional keyword arguments, including 'k_per_collection'.
+
+            Returns:
+                list: A list of ranked search results, each containing text, similarity score,
+                      and collection information.
+    """
     def __init__(self):
         self.collections = QDRANT_COLLECTIONS
         self.connectors = [
@@ -21,16 +53,15 @@ class MultiCollectionSearch:
         ]
         self.dense_embedding_model = SentenceTransformersEmbeddings()
 
-    def _search_single(self, connector, query, k_per_collection):
+    def _search_single(self, connector, query, k_per_collection) -> Sequence:
         return connector.search(query, k_per_collection)
 
-    def _compute_similarity(self, query_embedding, result_embedding):
-        """Compute cosine similarity between query and result embeddings"""
+    def _compute_similarity(self, query_embedding, result_embedding) -> np.ndarray:
         return np.dot(query_embedding, result_embedding) / (
                 np.linalg.norm(query_embedding) * np.linalg.norm(result_embedding)
         )
 
-    def search(self, query: str, k: int = 5, **kwargs):
+    def search(self, query: str, k: int = 5, **kwargs) -> Sequence:
         k_per_collection = min(kwargs.get("k_per_collection", k * 2), 20)
 
         all_results = []
