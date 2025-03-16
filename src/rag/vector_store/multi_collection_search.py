@@ -8,6 +8,7 @@ QDRANT_COLLECTIONS = [
     "agh_edu",
     "eaiib",
     "miasteczko_agh",
+
     "rekrutacja_agh"
 ]
 
