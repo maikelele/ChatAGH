@@ -55,11 +55,13 @@ streamlit run src/streamlit_app.py
 
 ### Chunking
 
-Once the data has been preprocessed and segmented, the next step involves breaking it into smaller, more manageable chunks. This process, known as chunking, is essential for efficient indexing and retrieval in large-scale information systems. To achieve this, the LangChain Recursive Character Text Splitter is utilized. This approach dynamically determines the optimal chunk size while ensuring that semantically meaningful segments remain intact, thereby improving retrieval accuracy during the search process.
+Once the data has been preprocessed and segmented, the next step involves breaking it into smaller, more manageable chunks. This process, known as chunking, is essential for efficient indexing and retrieval in large-scale information systems. To achieve this, the LangChain Recursive Character Text Splitter is utilized, spliting processed data using specified chunking parameters. 
 
 ### Vector Store
 
-After chunking, the generated segments are stored in a dedicated vector database for efficient retrieval. In this implementation, Qdrant is employed as the vector store due to its high performance and optimization for hybrid search scenarios. Qdrant provides fast and scalable storage of vector embeddings, enabling both semantic and keyword-based search functionalities.
+After chunking, the generated chunks are stored in a dedicated vector database for efficient retrieval. In this implementation, Qdrant is employed as the vector store due to its high performance and optimization for hybrid search scenarios. Qdrant provides fast and scalable storage of vector embeddings, enabling both semantic and keyword-based search functionalities.
+
+Each segment chunks are stored in a distinct collection within the vector store. This approach is necessary because the dataset is too large to be stored in a single collection without compromising performance and retrieval quality. Additionally, separating the data into multiple collections allows for thematic categorization, enabling more precise and context-aware search results.
 
 To enhance search effectiveness, a hybrid search retrieval mechanism is implemented. This approach leverages multiple types of embeddings for each chunk, ensuring that the system can handle diverse query types and return the most relevant results. The embeddings used include:
 
@@ -71,9 +73,22 @@ By combining these embedding techniques, the retrieval system is capable of deli
 
 
 
+
+
 ## Inference
 
+### Query Augmentation
+Short queries sometimes can carry too little information to retrieve most relevent chunks, to levarage this each query is expaned. We are using accordingly prompted LLM to rewrite question to cover more information.
 
+### Hybrid Search Retrieval
+As mentioned above, chunks are stored wtih three embedding vector (`dense`, `spare` and `late interaction`). Our hybrid search implementation includes:
+- Prefetch: uses dense and sparse embeddings, extracts most similar to the augmented query.
+- We are using `late_interaction` model to compare query vector agains vectors extracted from fetch step, specified number of most similar ones is returned. 
+
+### Multi Collection Search
+
+
+### Enhanced Retrieval Generation
 
 
 # Metrics and evaluation
