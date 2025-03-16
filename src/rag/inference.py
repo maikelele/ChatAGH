@@ -8,8 +8,7 @@ from rag.models.google_genai_models import (
     AnswerGenerationModel
 )
 
-ENV_PATH = "CHAT_AGH/config/.env"
-
+ENV_PATH = "src/.env"
 NUM_RETRIEVED_CHUNKS = 20
 MAX_SEARCH_ITERATIONS = 5
 
