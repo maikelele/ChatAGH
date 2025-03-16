@@ -4,7 +4,7 @@
 - [Overview](#overview)
 - [Developer guide](#developer-guide)
 - [Data sources and preparation](#data-sources-and-preparation)
-- [Documentation (Architecture and Technologies)](#documentation-architecture-and-technologies)
+- [RAG implementation](#rag-implementation)
 - [Metrics and evaluation](#metrics-and-evaluation)
 - [Future Improvements](#future-improvements)
 
@@ -48,7 +48,7 @@ streamlit run src/streamlit_app.py
 
 ## Data sources and preparation
 
-## Documentation (Architecture and Technologies)
+## RAG implementation
 
 ## Metrics and evaluation
 
