@@ -24,13 +24,14 @@ class BaseGoogleModel:
 
     def generate(self, query: str, **kwargs):
         context = kwargs.get("context", [])
-        contents = [
-            self.prompt_template.format(
-                CONTEXT=context,
-                QUERY=query
-            )
-        ]
-        return self._inference(contents)
+        prompt = self.prompt_template.format(
+            CONTEXT=context,
+            QUERY=query
+        )
+        contents = [prompt]
+        response = self._inference(contents)
+
+        return response
 
 
 class QueryAugmentationModel(BaseGoogleModel):

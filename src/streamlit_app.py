@@ -58,7 +58,7 @@ def main():
                 st.error("Please select a file to index")
 
     with tab2:
-        st.header("Query Inference")
+        st.header("Inference")
 
         # collection_name = st.text_input("Collection Name for Inference", value=default_collection)
 

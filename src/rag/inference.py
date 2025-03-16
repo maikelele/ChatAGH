@@ -1,11 +1,6 @@
-import os
-
-import ast
-import concurrent.futures
 from dotenv import load_dotenv
 from langchain_core.documents import Document
 
-from rag.vector_store.qdrant_hybrid_search import QdrantHybridSearchVectorStore
 from rag.vector_store.multi_collection_search import MultiCollectionSearch
 from rag.models.google_genai_models import (
     QueryAugmentationModel,
@@ -13,10 +8,9 @@ from rag.models.google_genai_models import (
     AnswerGenerationModel
 )
 
-ENV_PATH = "/Users/wnowogorski/PycharmProjects/CHAT_AGH/config/.env"
-VECTOR_STORE_PATH = "/Users/wnowogorski/PycharmProjects/CHAT_AGH"
+ENV_PATH = "CHAT_AGH/config/.env"
 
-NUM_RETRIEVED_CHUNKS = 10
+NUM_RETRIEVED_CHUNKS = 20
 MAX_SEARCH_ITERATIONS = 5
 
 
@@ -27,7 +21,7 @@ def inference(query):
     augmented_query = query_augmentation_model.generate(query)
 
     vector_store = MultiCollectionSearch()
-    source_docs = vector_store.search(query, 10)
+    source_docs = vector_store.search(query, NUM_RETRIEVED_CHUNKS)
 
     enhance_search_model = EnhanceSearchModel()
     summaries = []
@@ -37,15 +31,15 @@ def inference(query):
         if not (summary and questions):
             break
 
-        summaries.append(Document(page_content=summary))
+        summaries.append({"text": summary})
 
         questions = " \n".join(questions)
-        source_docs = vector_store.search(questions, k=5)
+        source_docs = vector_store.search(questions, k=NUM_RETRIEVED_CHUNKS)
 
     source_docs.extend(summaries)
 
-    answwer_generation_model = AnswerGenerationModel()
-    final_response = answwer_generation_model.generate(augmented_query, context=source_docs)
+    answer_generation_model = AnswerGenerationModel()
+    final_response = answer_generation_model.generate(augmented_query, context=source_docs)
 
     return final_response, source_docs
 

@@ -6,9 +6,8 @@ from rag.chunkers.langchain_chunker import LangChainChunker
 from rag.embeddings.google_embeddings import GoogleEmbeddings
 from rag.vector_store.qdrant_hybrid_search import QdrantHybridSearchVectorStore
 
-ENV_PATH = "/Users/wnowogorski/PycharmProjects/CHAT_AGH/config/.env"
-DATA_PATH = "/Users/wnowogorski/PycharmProjects/CHAT_AGH/data_2/agh_edu"
-VECTOR_STORE_PATH = "/Users/wnowogorski/PycharmProjects/CHAT_AGH"
+ENV_PATH = "CHAT_AGH/config/.env"
+DATA_PATH = "CHAT_AGH/data_2/agh_edu"
 
 
 def indexing(data_path, collection_name, chunk_size=1000, chunk_overlap=100):
