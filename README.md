@@ -44,31 +44,37 @@ Add `.env` file with your credentials in src directory, you can find required cr
 streamlit run src/streamlit_app.py
 ```
 
-# Data sources and preparation
+# Data processing
+## Data sources 
+## Scraping
+## Processing
 
 # RAG implementation
 
 ## Indexing
-Designed to enable efficient retrieval of text documents using a hybrid search approach. The architecture integrates multiple embedding techniques and a scalable vector store for optimized information retrieval.
+
+### Chunking
+
+Once the data has been preprocessed and segmented, the next step involves breaking it into smaller, more manageable chunks. This process, known as chunking, is essential for efficient indexing and retrieval in large-scale information systems. To achieve this, the LangChain Recursive Character Text Splitter is utilized. This approach dynamically determines the optimal chunk size while ensuring that semantically meaningful segments remain intact, thereby improving retrieval accuracy during the search process.
+
+### Vector Store
+
+After chunking, the generated segments are stored in a dedicated vector database for efficient retrieval. In this implementation, Qdrant is employed as the vector store due to its high performance and optimization for hybrid search scenarios. Qdrant provides fast and scalable storage of vector embeddings, enabling both semantic and keyword-based search functionalities.
+
+To enhance search effectiveness, a hybrid search retrieval mechanism is implemented. This approach leverages multiple types of embeddings for each chunk, ensuring that the system can handle diverse query types and return the most relevant results. The embeddings used include:
+
+- **Dense Embeddings** – Derived from `distiluse-base-multilingual-cased-v1`, a transformer-based model designed to generate sentence embeddings optimized for capturing semantic similarity.
+- **Sparse Embeddings** – Created using `Qdrant/bm25`, a traditional keyword-based retrieval model that utilizes Term Frequency-Inverse Document Frequency (TF-IDF) techniques to improve lexical matching.
+- **Late Interaction Embeddings** – Based on `colbert-ir/colbertv2.0`, a deep learning model that refines search results by considering the interaction between query and document representations at a later stage in the ranking process.
+
+By combining these embedding techniques, the retrieval system is capable of delivering high-quality search results that balance both semantic relevance and lexical precision.
 
 
-#### Vector Store
-
-The project utilizes Qdrant, a high-performance vector database optimized for hybrid search. Qdrant enables efficient storage and retrieval of vector representations, supporting multiple embedding types.
-
-#### Hybrid Search
-
-To enhance search quality, the system employs a hybrid retrieval mechanism combining:
-- Dense Embeddings – Derived from `distiluse-base-multilingual-cased-v1`, a transformer-based sentence embedding model optimized for semantic similarity.
-- Sparse Embeddings – Generated using `Qdrant/bm25`, a traditional keyword-based retrieval model leveraging term frequency-inverse document frequency (TF-IDF) techniques.
-- Late Interaction Embeddings – Based on `colbert-ir/colbertv2.0`, a deep-learning-based ranking model that refines search results through late interaction mechanisms.
-
-#### Indexing Workflow
-- Chunking – Data is split into structured segments using predefined chunk size.
-- Embedding Generation – Each chunk is encoded using the three embedding models.
-- Storage – The resulting vectors are stored in Qdrant, facilitating hybrid retrieval during inference.
 
 ## Inference
+
+
+
 
 # Metrics and evaluation
 
