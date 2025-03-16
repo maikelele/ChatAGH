@@ -3,6 +3,7 @@ import ast
 
 from google import genai
 
+from rag.utils.logger import logger
 from rag.models.prompts import (
     QUERY_AUGMENTATION_PROMPT_TEMPLATE,
     ENHANCE_SEARCH_PROMPT_TEMPLATE,
@@ -36,6 +37,7 @@ class BaseGoogleModel:
         self.prompt_template = prompt_template
 
     def _inference(self, contents):
+        logger.debug(f"[{self.__class__.__name__}] Inferring model with content:'{contents}'")
         return self.client.models.generate_content(
             model=self.model,
             contents=contents,
