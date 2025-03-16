@@ -13,36 +13,35 @@ Chat AGH is a Retrieval-Augmented Generation (RAG) system designed to deliver ac
 
 ## Developer guide
 
-### The same for all OS
-Clone repository
+### Clone repository
 ```
 git clone https://github.com/witoldnowogorski/ChatAGH
+cd ChatAGH
 ```
-Create a new virtual environment
+
+### Create environment
 ```
 python3 -m venv chat_agh
 ```
-### For linux/mac
-Activate the environment
+Unix / MacOS
 ```
 source chat_agh/bin/activate
 ```
-### For windows
-Move to next directory
+Windows
 ```
 cd chat_agh
-```
-
-Activate the enviroment
-```
 .\Scripts\activate
 ```
-### The same for all OS
-Install requirements
+
+### Install requirements
 ```
 pip install -r requirements.txt
 ```
-Run streamlit app
+
+### Credentials
+Add `.env` file with your credentials in config directory, you can find required credentials in `.env.template`
+
+### Run streamlit app
 ```
 streamlit run src/streamlit_app.py
 ```
