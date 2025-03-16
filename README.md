@@ -1,7 +1,7 @@
 # Contents
 - [Overview](#overview)
 - [Developer guide](#developer-guide)
-- [Data sources and preparation](#data-sources-and-preparation)
+- [Data processing](#data-processing)
 - [RAG implementation](#rag-implementation)
 - [Metrics and evaluation](#metrics-and-evaluation)
 - [Future Improvements](#future-improvements)
