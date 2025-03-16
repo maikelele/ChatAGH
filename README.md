@@ -75,6 +75,7 @@ By combining these embedding techniques, the retrieval system is capable of deli
 
 
 ## Inference
+<img width="1214" alt="Screenshot 2025-03-16 at 17 29 22" src="https://github.com/user-attachments/assets/e9ef9eaa-fdc9-4321-bf6a-aaddf952ffc4" />
 
 ### Query Augmentation
 Short queries often lack sufficient detail to retrieve the most relevant chunks. To address this, each query is expanded using a properly prompted LLM. This process ensures that the question covers more information, improving retrieval effectiveness.
