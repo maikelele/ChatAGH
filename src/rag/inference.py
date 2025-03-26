@@ -1,3 +1,4 @@
+import os
 from dotenv import load_dotenv
 from langchain_core.documents import Document
 
@@ -8,6 +9,7 @@ from rag.models.google_genai_models import (
     EnhanceSearchModel,
     AnswerGenerationModel
 )
+from rag.vector_store.pinecone_hybrid_search import PineconeHybridSearchVectorStore
 
 ENV_PATH = ".env"
 NUM_RETRIEVED_CHUNKS = 20
@@ -22,8 +24,10 @@ def inference(query):
     augmented_query = query_augmentation_model.generate(query)
     logger.info("Query augmented: \n {} \n\n".format(augmented_query))
 
-    vector_store = MultiCollectionSearch()
+    vector_store = PineconeHybridSearchVectorStore(os.environ["PINECONE_API_KEY"], "chatagh")
     source_docs = vector_store.search(query, NUM_RETRIEVED_CHUNKS)
+    print(source_docs)
+
     logger.info("Retrieved {} chunks: \n {} \n\n".format(len(source_docs), source_docs))
 
     enhance_search_model = EnhanceSearchModel()
@@ -38,7 +42,7 @@ def inference(query):
         summaries.append({"text": summary})
 
         questions = " \n".join(questions)
-        source_docs = vector_store.search(questions, k=NUM_RETRIEVED_CHUNKS)
+        source_docs = vector_store.search(questions, top_k=NUM_RETRIEVED_CHUNKS)
 
     source_docs.extend(summaries)
     logger.info("Final retrieval result: \n {} \n\n".format(source_docs))
@@ -51,5 +55,5 @@ def inference(query):
 
 
 if __name__ == "__main__":
-    query = "Czy mogę brać udział w rekrutacji będąc niepełnoletnim?"
+    query = "Czy mogę zakwaterować sie po blokadzie kwaterowania?"
     print(inference(query))
