@@ -7,10 +7,14 @@ from rag.embeddings.sentence_transformers_embeddings import SentenceTransformers
 from rag.vector_store.qdrant_hybrid_search import QdrantHybridSearchVectorStore
 
 QDRANT_COLLECTIONS = [
-    "agh_edu",
-    "eaiib",
-    "miasteczko_agh",
-    "rekrutacja_agh"
+    "agh_edu_1",
+    # "agh_edu_2",
+    # "agh_edu_3",
+    # "agh_edu_4",
+    # "rekrutacja_sylabusy_agh",
+    "miasteczko_akademik_agh",
+    # "historia_agh",
+    # "dss_agh"
 ]
 
 

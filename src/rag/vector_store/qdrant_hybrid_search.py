@@ -64,6 +64,42 @@ class QdrantHybridSearchVectorStore:
                 }
             )
 
+    def index_2(self, documents: list[Document], batch_size=10):
+        dense_embeddings = list(self.dense_embedding_model.embed([doc.page_content for doc in documents]))
+        sparse_embeddings = list(self.sparse_embedding_model.embed([doc.page_content for doc in documents]))
+        late_interaction_embeddings = list(self.late_interaction_embedding_model.embed([doc.page_content for doc in documents]))
+        print(f"Embedding finished, num vectors: {len(dense_embeddings)}.")
+
+        points = [
+            models.PointStruct(
+                id=i,
+                vector={
+                    "dense": dense_embeddings[i],
+                    "sparse": sparse_embeddings[i].as_object(),
+                    "late_interaction": late_interaction_embeddings[i].tolist(),
+                },
+                payload={
+                    "url": doc.metadata.get("url"),
+                    "title": doc.metadata.get("title"),
+                    "description": doc.metadata.get("description"),
+                    "date": doc.metadata.get("date"),
+                    "tags": doc.metadata.get("tags"),
+                    "source": doc.metadata.get("source"),
+                    "text": doc.page_content,
+                }
+            )
+            for i, doc in enumerate(documents)
+        ]
+        for i in range(0, len(points), batch_size):
+            points_batch = points[i:i + batch_size]
+            self.client.upload_points(
+                self.collection_name,
+                points=points_batch
+            )
+            print(f"Uploaded batch {i // batch_size + 1}")
+
+        print(f"Uploaded {len(dense_embeddings)} vectors.")
+
     def index(self, documents: list[Document]):
         for idx, doc in enumerate(documents):
             dense_embeddings = list(self.dense_embedding_model.embed([doc.page_content]))
