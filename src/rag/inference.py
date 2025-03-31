@@ -10,6 +10,7 @@ from rag.models.google_genai_models import (
     AnswerGenerationModel
 )
 from rag.vector_store.pinecone_hybrid_search import PineconeHybridSearchVectorStore
+from rag.vector_store.milvus_hybrid_search import MilvusHybridSearch
 
 ENV_PATH = ".env"
 NUM_RETRIEVED_CHUNKS = 20
@@ -24,7 +25,8 @@ def inference(query):
     augmented_query = query_augmentation_model.generate(query)
     logger.info("Query augmented: \n {} \n\n".format(augmented_query))
 
-    vector_store = PineconeHybridSearchVectorStore(os.environ["PINECONE_API_KEY"], "chatagh")
+    vector_store = MilvusHybridSearch("chatagh")
+    # vector_store = PineconeHybridSearchVectorStore(os.environ["PINECONE_API_KEY"], "chatagh")
     source_docs = vector_store.search(query, NUM_RETRIEVED_CHUNKS)
     print(source_docs)
 
@@ -42,7 +44,7 @@ def inference(query):
         summaries.append({"text": summary})
 
         questions = " \n".join(questions)
-        source_docs = vector_store.search(questions, top_k=NUM_RETRIEVED_CHUNKS)
+        source_docs = vector_store.search(questions, k=NUM_RETRIEVED_CHUNKS)
 
     source_docs.extend(summaries)
     logger.info("Final retrieval result: \n {} \n\n".format(source_docs))

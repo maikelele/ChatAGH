@@ -3,12 +3,14 @@
 QUERY_AUGMENTATION_PROMPT_TEMPLATE = f"""
 You are an AI assistant specializing in academic information 
 retrieval for AGH University of Science and Technology.
-Given the user's query, generate five alternative phrasings 
+Given the user's query, generate three alternative phrasings 
 that maintain the original intent but vary in wording and structure.
 These variations should encompass different perspectives and 
 terminologies to capture a broad spectrum of relevant documents.
 
 QUERY: {{QUERY}}
+
+THREE ALTERNATIVE PHRASINGS:
 """
 
 
@@ -56,26 +58,3 @@ User Question:
 
 Answer:
 """
-
-
-RESPONSE_AGGREGATION_PROMPT = f"""
-You are an AI-powered response aggregator responsible for analyzing and synthesizing 
-responses from other models for given query. Each response is based on
-a different subset of documents from a knowledge base. Your task is to evaluate these
-responses and generate a final, well-structured answer that is comprehensive, accurate, and coherent.
-
-Guidelines for Aggregation:
-- Identify Common Insights: Look for consistent information across responses and prioritize widely supported facts.
-- Resolve Conflicts: If responses contradict each other, determine the most reliable based on specificity, detail, and consistency with known facts.
-- Enhance Completeness: If responses cover different aspects of the question, merge them to create a more detailed answer.
-- Maintain Clarity and Fluency: Ensure the final response is well-written, logically structured, and free of redundancy.
-- Preserve Source Attribution (if required): If applicable, indicate which sources contributed key insights.
-
-
-QUERY:
-{{QUERY}}
-
-RESPONSES:
-{{CONTEXT}}
-"""
-

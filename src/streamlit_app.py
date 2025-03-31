@@ -4,7 +4,7 @@ import tempfile
 import time
 
 from rag.utils.utils import load_env
-from rag.indexing import indexing_single
+from rag.indexing import indexing
 from rag.inference import inference
 from rag.utils.logger import LOG_FILE
 
@@ -59,7 +59,7 @@ def main():
                 delete_after = index_method == "Upload File"
                 with st.spinner("Indexing documents..."):
                     try:
-                        num_chunks = indexing_single(file_path, collection_name, chunk_size, chunk_overlap)
+                        num_chunks = indexing(file_path, collection_name, chunk_size, chunk_overlap)
                         st.success(f"Successfully indexed {num_chunks} chunks into collection '{collection_name}'")
                     except Exception as e:
                         st.error(f"Error during indexing: {str(e)}")
