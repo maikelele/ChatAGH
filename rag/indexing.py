@@ -41,7 +41,7 @@ def indexing(data_path, collection_name, chunk_size=1000, chunk_overlap=100, max
 if __name__ == "__main__":
     i = 5
     result = indexing(
-        "/Users/wnowogorski/PycharmProjects/CHAT_AGH/chat_agh_data",
+        "/data",
         "chatagh",
         chunk_size=1500,
         chunk_overlap=0,
