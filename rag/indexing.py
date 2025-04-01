@@ -1,11 +1,6 @@
-import os
-from multiprocessing import Pool
-
 from dotenv import load_dotenv
-from rag.utils.utils import load_data
+from rag.utils.utils import load_json_data
 from rag.chunkers.langchain_chunker import LangChainChunker
-from rag.vector_store.qdrant_hybrid_search import QdrantHybridSearchVectorStore
-from rag.vector_store.pinecone_hybrid_search import PineconeHybridSearchVectorStore
 from rag.vector_store.milvus_hybrid_search import MilvusHybridSearch
 
 ENV_PATH = ".env"
@@ -26,7 +21,7 @@ def indexing(data_path, collection_name, chunk_size=1000, chunk_overlap=100, max
         tuple: (collection_name, number of chunks)
     """
     load_dotenv(dotenv_path=ENV_PATH)
-    data = load_data(data_path)
+    data = load_json_data(data_path)
 
     chunker = LangChainChunker(chunk_size, chunk_overlap, remove_duplicates=True)
     chunks = chunker.chunk(data)
@@ -44,10 +39,9 @@ def indexing(data_path, collection_name, chunk_size=1000, chunk_overlap=100, max
 
 
 if __name__ == "__main__":
-
     i = 5
     result = indexing(
-        "/Users/wnowogorski/PycharmProjects/CHAT_AGH/src/collections/dss",
+        "/Users/wnowogorski/PycharmProjects/CHAT_AGH/chat_agh_data",
         "chatagh",
         chunk_size=1500,
         chunk_overlap=0,

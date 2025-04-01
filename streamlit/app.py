@@ -1,7 +1,9 @@
-import os
 import streamlit as st
 import tempfile
 import time
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from rag.utils.utils import load_env
 from rag.indexing import indexing
