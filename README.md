@@ -95,6 +95,8 @@ The `main` branch is the primary branch of the repository. All development shoul
 ## Processing
 
 # RAG implementation
+<span style="color: red;">⚠️ Outdated! Will be upadted shortly.</span>
+
 
 ## Indexing
 <img width="971" alt="Screenshot 2025-03-16 at 17 05 31" src="https://github.com/user-attachments/assets/fc19e15d-c8ac-48e8-8ab8-f17e2bc16d16" />
