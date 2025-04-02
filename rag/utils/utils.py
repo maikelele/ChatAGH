@@ -13,11 +13,16 @@ def load_json_data(path: str):
     for file in os.listdir(path):
         with open(os.path.join(path, file)) as json_file:
             file_data = json.load(json_file)
-        document = Document(
-            page_content=file_data["content"],
-            metadata=file_data["metadata"]
-        )
-        documents.append(document)
+        i = 0
+        try:
+            i += 1
+            document = Document(
+                page_content=file_data["content"],
+                metadata=file_data["metadata"]
+            )
+            documents.append(document)
+        except Exception as e:
+            print(f"Unable to read file: {file}, error: {e}")
 
     return documents
 
