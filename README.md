@@ -61,7 +61,7 @@ pip install -r requirements.txt
 ```
 
 ### Credentials
-Add `.env` file with your credentials in src directory, you can find required credentials in `.env.template`
+Add `.env` file with your credentials in root directory, you can find required credentials in `.env.template`
 
 ### Setup docker container with Milvus database
 - Ensure you have Docker and Docker Compose installed https://www.docker.com/products/docker-desktop.
