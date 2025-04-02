@@ -96,23 +96,18 @@ class MilvusHybridSearch:
         results = []
         total_docs = len(documents)
 
-        # Process documents in batches
         for i in range(0, total_docs, batch_size):
-            # Get the current batch
             batch_docs = documents[i:i + batch_size]
             batch_contents = [doc.page_content for doc in batch_docs]
 
-            # Generate embeddings for the batch
             batch_embeddings = self.dense_embedding_model.encode(batch_contents).tolist()
             print(f"Batch {i // batch_size + 1} embedding finished: {len(batch_embeddings)} vectors")
 
-            # Prepare data for insertion
             batch_data = [
                 {"text": doc.page_content, "dense": emb, "metadata": doc.metadata}
                 for doc, emb in zip(batch_docs, batch_embeddings)
             ]
 
-            # Insert the batch
             batch_result = self.client.insert(
                 collection_name=self.collection_name,
                 data=batch_data
