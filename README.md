@@ -12,47 +12,89 @@ Chat AGH is a Retrieval-Augmented Generation (RAG) system designed to deliver ac
 # Developer guide
 
 ### Clone repository
-```
+```shell
 git clone https://github.com/witoldnowogorski/ChatAGH
 cd ChatAGH
 ```
 
 ### Create environment
+##### Option 1 - Conda environment
+- Create a new Conda environment:
 ```
-python3 -m venv chat_agh
+conda create --name chat_agh python=3.11 -y
 ```
-Unix / MacOS
-```
-source chat_agh/bin/activate
-```
-Windows
-```
-cd chat_agh
-.\Scripts\activate
-```
+- Activate the environment:
 
-### Install requirements
+    - Windows:
+    ```shell
+    conda activate chat_agh
+    ```
+    - macOS/Linux:
+    ```shell
+    source activate chat_agh
+    ```
+#### Option 2 - Python Virtual Environment (venv)
+
+Windows:
+Activate the environment:
+
+
+
+- Create a virtual environment:
+```
+python -m venv venv
+```
+- Activate the environment:
+  - Windows
+    ```shell
+    venv\Scripts\activate
+    ```
+  - macOS/Linux:
+    ```shell
+    source venv/bin/activate
+    ```
+
+    
+### Install dependencies
 ```
 pip install -r requirements.txt
 ```
 
 ### Credentials
-Add `.env` file with your credentials in src directory, you can find required credentials in `.env.template`
+Add `.env` file with your credentials in root directory, you can find required credentials in `.env.template`
+
+### Setup docker container with Milvus database
+- Ensure you have Docker and Docker Compose installed https://www.docker.com/products/docker-desktop.
+- Navigate to `milvus` directory and start Milvus vector store database container using `docker-compose.yaml` file:
+```shell
+cd milvus
+docker compose up -d
+```
+- Verify that Milvus container is running:
+```shell
+docker ps
+```
+### Index data to Milvus vector store.
+Run `indexing.py` script to embedd and upload web scraped data from `data` directory to Milvus database:
+```shell
+python rag/indexing.py
+```
 
 ### Run streamlit app
-```
-streamlit run src/streamlit_app.py
+Now you can run streamlit app to perform queries.
+```shell
+streamlit run streamlit/app.py
 ```
 
 ### Contributing
-The main branch is the primary branch of the repository. All development should be done on separate branches, and contributions must be submitted via pull requests (PRs) to main. Each PR requires at least one approving review before it can be merged.
+The `main` branch is the primary branch of the repository. All development should be done on separate branches, and contributions must be submitted via pull requests (PRs) to the `development` branch. Each PR requires at least one approving review before it can be merged.
 
 # Data processing
 ## Data sources 
 ## Scraping
 ## Processing
 
-# RAG implementation
+# RAG implementation - ⚠️ Outdated! Will be updated shortly.
 
 ## Indexing
 <img width="971" alt="Screenshot 2025-03-16 at 17 05 31" src="https://github.com/user-attachments/assets/fc19e15d-c8ac-48e8-8ab8-f17e2bc16d16" />
