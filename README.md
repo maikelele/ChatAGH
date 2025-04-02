@@ -12,26 +12,50 @@ Chat AGH is a Retrieval-Augmented Generation (RAG) system designed to deliver ac
 # Developer guide
 
 ### Clone repository
-```
+```shell
 git clone https://github.com/witoldnowogorski/ChatAGH
 cd ChatAGH
 ```
 
 ### Create environment
+##### Option 1 - Conda environment
+- Create a new Conda environment:
 ```
-python3 -m venv chat_agh
+conda create --name chat_agh python=3.11 -y
 ```
-Unix / MacOS
-```
-source chat_agh/bin/activate
-```
-Windows
-```
-cd chat_agh
-.\Scripts\activate
-```
+- Activate the environment:
 
-### Install requirements
+    - Windows:
+    ```shell
+    conda activate chat_agh
+    ```
+    - macOS/Linux:
+    ```shell
+    source activate chat_agh
+    ```
+#### Option 2 - Python Virtual Environment (venv)
+
+Windows:
+Activate the environment:
+
+
+
+- Create a virtual environment:
+```
+python -m venv venv
+```
+- Activate the environment:
+  - Windows
+    ```shell
+    venv\Scripts\activate
+    ```
+  - macOS/Linux:
+    ```shell
+    source venv/bin/activate
+    ```
+
+    
+### Install dependencies
 ```
 pip install -r requirements.txt
 ```
@@ -39,9 +63,27 @@ pip install -r requirements.txt
 ### Credentials
 Add `.env` file with your credentials in src directory, you can find required credentials in `.env.template`
 
-### Run streamlit app
+### Setup docker container with Milvus database
+- Ensure you have Docker and Docker Compose installed https://www.docker.com/products/docker-desktop.
+- Navigate to `milvus` directory and start Milvus vector store database container using `docker-compose.yaml` file:
+```shell
+cd milvus
+docker compose up -d
 ```
-streamlit run src/streamlit_app.py
+- Verify that Milvus container is running:
+```shell
+docker ps
+```
+### Index data to Milvus vector store.
+Run `indexing.py` script to embedd and upload web scraped data from `data` directory to Milvus database:
+```shell
+python rag/indexing.py
+```
+
+### Run streamlit app
+Now you can run streamlit app to perform queries.
+```shell
+streamlit run streamlit/app.py
 ```
 
 ### Contributing

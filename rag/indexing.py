@@ -1,3 +1,7 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from dotenv import load_dotenv
 from rag.utils.utils import load_json_data
 from rag.chunkers.langchain_chunker import LangChainChunker
