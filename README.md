@@ -87,7 +87,7 @@ streamlit run streamlit/app.py
 ```
 
 ### Contributing
-The main branch is the primary branch of the repository. All development should be done on separate branches, and contributions must be submitted via pull requests (PRs) to main. Each PR requires at least one approving review before it can be merged.
+The `main` branch is the primary branch of the repository. All development should be done on separate branches, and contributions must be submitted via pull requests (PRs) to the `development` branch. Each PR requires at least one approving review before it can be merged.
 
 # Data processing
 ## Data sources 
