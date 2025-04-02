@@ -82,17 +82,48 @@ class MilvusHybridSearch:
             index_params=index_params
         )
 
-    def indexing(self, documents: List[Document]):
-        contents = [doc.page_content for doc in documents]
-        dense_embeddings = self.dense_embedding_model.encode(contents).tolist()
-        print(f"Embedding finished: {len(dense_embeddings)} vectors")
+    def indexing(self, documents: List[Document], batch_size: int = 100):
+        """
+        Index documents in batches to improve performance and memory management.
 
-        data = [{"text": doc.page_content, "dense": emb, "metadata": doc.metadata} for doc, emb in zip(documents, dense_embeddings)]
-        res = self.client.insert(
-            collection_name=self.collection_name,
-            data=data
-        )
-        return res
+        Args:
+            documents: List of Document objects to index
+            batch_size: Number of documents to process in each batch
+
+        Returns:
+            List of results from all batch insertions
+        """
+        results = []
+        total_docs = len(documents)
+
+        # Process documents in batches
+        for i in range(0, total_docs, batch_size):
+            # Get the current batch
+            batch_docs = documents[i:i + batch_size]
+            batch_contents = [doc.page_content for doc in batch_docs]
+
+            # Generate embeddings for the batch
+            batch_embeddings = self.dense_embedding_model.encode(batch_contents).tolist()
+            print(f"Batch {i // batch_size + 1} embedding finished: {len(batch_embeddings)} vectors")
+
+            # Prepare data for insertion
+            batch_data = [
+                {"text": doc.page_content, "dense": emb, "metadata": doc.metadata}
+                for doc, emb in zip(batch_docs, batch_embeddings)
+            ]
+
+            # Insert the batch
+            batch_result = self.client.insert(
+                collection_name=self.collection_name,
+                data=batch_data
+            )
+
+            results.append(batch_result)
+            print(
+                f"Inserted batch {i // batch_size + 1}/{(total_docs + batch_size - 1) // batch_size}: {len(batch_docs)} documents")
+
+        print(f"Indexing complete: {total_docs} total documents processed in {len(results)} batches")
+        return results
 
     def search(self, query: str, k: int = 5) -> List[Document]:
         query_embedding = self.dense_embedding_model.encode(query).tolist()
